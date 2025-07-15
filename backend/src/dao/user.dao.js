@@ -1,13 +1,17 @@
 import User from '../models/user.model.js';
 
-export const findUserByUsername=async(username)=>{
-    return await User.findOne({username});
-}
+export const createUser = async (userData) => {
+  return await User.create(userData);
+};
 
-export const findUserByEmail=async(email)=>{
-    return await User.findOne({email});
-}
+export const findUserByEmail = async (email) => {
+  return await User.findOne({ email });
+};
 
-export const createUser=async(user)=>{
-    return await User.create(user);
-}
+export const updateUserById = async (id, update) => {
+  return await User.findByIdAndUpdate(id, update, { new: true });
+};
+
+export const findUserById = async (id) => {
+  return await User.findById(id);
+};
