@@ -1,10 +1,14 @@
 import nodemailer from 'nodemailer';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const transporter = nodemailer.createTransport({
-  service: 'gmail', // You can change to 'smtp.ethereal.email' or another provider
+  host: 'smtp.gmail.com', 
+  port:465,
+  secure:true,
   auth: {
-    user: process.env.EMAIL,
-    pass: process.env.EMAIL_PASS,
+    user: 'abhishekak.madquick@gmail.com',
+    pass: 'joesbrxzmvmlbacp',
   },
 });
 
@@ -15,7 +19,7 @@ const transporter = nodemailer.createTransport({
  */
 export const sendVerificationOtp = async (to, otp) => {
   const mailOptions = {
-    from: `"MyApp" <${process.env.EMAIL}>`,
+    from: `"MyApp" <abhishekak.madquick@gmail.com>`,
     to,
     subject: '🔐 Email Verification - OTP Inside',
     html: `

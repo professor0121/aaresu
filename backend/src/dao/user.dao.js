@@ -15,3 +15,7 @@ export const updateUserById = async (id, update) => {
 export const findUserById = async (id) => {
   return await User.findById(id);
 };
+
+export const updateVerified = async (email) => {
+  return await User.findOneAndUpdate({ email }, { verified: true }, { new: true });
+};
