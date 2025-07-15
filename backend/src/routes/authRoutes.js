@@ -4,10 +4,10 @@ import { registerUser, loginUser, updateUser, getUser, sendOtp, verifyOtp } from
 
 router.post('/register',registerUser);
 router.post('/login',loginUser);
+router.post('/verifyOtp',verifyOtp);
+
 router.put('/updateUser',updateUser);
 router.get('/me',getUser);
-router.post('/sendOtp',sendOtp);
-router.post('/verifyOtp',verifyOtp);
     
 
 export default router;
