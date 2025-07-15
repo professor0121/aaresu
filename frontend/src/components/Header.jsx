@@ -6,7 +6,11 @@ import {
     Menu,
     X,
     ChevronDown,
+    User,
+    LogOut,
 } from "lucide-react";
+import { useAuthContent } from "../hooks/useAuth";
+import LogoutButton from "./LogoutButton";
 
 const components = [
     {
@@ -123,6 +127,52 @@ function ListItem({ title, children, to = "#", ...props }) {
                 </p>
             </a>
         </li>
+    );
+}
+
+// Authentication section component
+function AuthSection({ isMobile = false }) {
+    const { user, ifAuthenticated, ifNotAuthenticated } = useAuthContent();
+
+    return (
+        <div className={isMobile ? "space-y-2" : "flex items-center space-x-4"}>
+            {ifAuthenticated(
+                <div className={`flex items-center ${isMobile ? 'flex-col space-y-2' : 'space-x-3'}`}>
+                    <div className={`flex items-center ${isMobile ? 'space-x-2' : 'space-x-2'}`}>
+                        <User size={16} className="text-gray-600" />
+                        <span className="text-sm font-medium text-gray-700">
+                            {user?.username || user?.email}
+                        </span>
+                        {user?.verified && (
+                            <CheckCircle size={14} className="text-green-500" title="Verified" />
+                        )}
+                    </div>
+                    <LogoutButton
+                        className={`${isMobile ? 'w-full' : ''} px-3 py-1 text-xs`}
+                    >
+                        <LogOut size={14} className="mr-1" />
+                        Logout
+                    </LogoutButton>
+                </div>
+            )}
+
+            {ifNotAuthenticated(
+                <div className={`flex ${isMobile ? 'flex-col space-y-2' : 'space-x-2'}`}>
+                    <a
+                        href="/login"
+                        className="px-3 py-1 text-sm text-blue-600 hover:text-blue-800 font-medium"
+                    >
+                        Login
+                    </a>
+                    <a
+                        href="/register"
+                        className="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 font-medium"
+                    >
+                        Register
+                    </a>
+                </div>
+            )}
+        </div>
     );
 }
 
@@ -252,7 +302,7 @@ export default function ResponsiveNavigationMenu() {
 
                     {/* Profile (Desktop) */}
                     <div className="hidden md:block">
-                        <div className="text-sm font-medium text-gray-700">Profile</div>
+                        <AuthSection />
                     </div>
 
                     {/* Mobile menu button */}
@@ -374,7 +424,7 @@ export default function ResponsiveNavigationMenu() {
                     
                     {/* Mobile Profile */}
                     <div className="px-4 py-3 border-t border-gray-200">
-                        <div className="text-sm font-medium text-gray-700">Profile</div>
+                        <AuthSection isMobile={true} />
                     </div>
                 </div>
             )}

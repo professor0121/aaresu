@@ -58,10 +58,12 @@ export const updateUser = asyncHandler(async (req, res) => {
 
 export const getUser = asyncHandler(async (req, res) => {
     // User is available in req.user from authenticateToken middleware
+    const {email}=req.user;
+    const user = await findUserByEmail(email);
     res.status(200).json({
         success: true,
         message: 'User retrieved successfully',
-        user: req.user
+        user
     });
 })
 

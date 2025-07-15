@@ -38,3 +38,19 @@ export const verifyOtp = createAsyncThunk(
     }
   }
 );
+
+// redux/auth/authThunks.js
+export const loadUser = createAsyncThunk(
+  'auth/loadUser',
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await axiosInstance.get('/auth/me', {
+        withCredentials: true,
+      });
+      console.log(res.data.user);
+      return res.data.user;
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message || 'Auth failed');
+    }
+  }
+);
