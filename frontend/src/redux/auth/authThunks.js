@@ -25,3 +25,16 @@ export const loginUser = createAsyncThunk(
     }
   }
 );
+
+
+export const verifyOtp = createAsyncThunk(
+  'auth/verifyOtp',
+  async (formData, { rejectWithValue }) => {
+    try {
+      const response = await axiosInstance.post('/auth/verifyOtp', formData);
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message || 'OTP verification failed');
+    }
+  }
+);

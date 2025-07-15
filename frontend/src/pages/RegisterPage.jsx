@@ -13,19 +13,23 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
+import { useDispatch, useSelector } from 'react-redux';
+import { registerUser } from '../redux/auth/authThunks';
+
 export default function LoginForm() {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     const form = useForm({
         defaultValues: {
             email: "",
             password: "",
-            otp: "",
         },
     });
 
     const onSubmit = (data) => {
-        console.log("Submitted:", data);
+        dispatch(registerUser(data));
+        navigate('/login')
     };
 
     return (
