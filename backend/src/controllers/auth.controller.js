@@ -34,13 +34,35 @@ export const loginUser = asyncHandler(async (req, res) => {
 })
 
 export const updateUser = asyncHandler(async (req, res) => {
-    //logic of updating user
-    return req.body;
+    // User is available in req.user from authenticateToken middleware
+    const { username, bio } = req.body;
+    const userId = req.user.id;
+
+    try {
+        // Here you would implement the actual update logic
+        // For now, returning user info with success message
+        res.status(200).json({
+            success: true,
+            message: 'User updated successfully',
+            user: req.user,
+            updateData: { username, bio }
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: 'Failed to update user',
+            error: error.message
+        });
+    }
 })
 
 export const getUser = asyncHandler(async (req, res) => {
-    //logic of getting user
-    return req.body;
+    // User is available in req.user from authenticateToken middleware
+    res.status(200).json({
+        success: true,
+        message: 'User retrieved successfully',
+        user: req.user
+    });
 })
 
 export const sendOtp = asyncHandler(async (req, res) => {
@@ -68,4 +90,18 @@ export const verifyOtp = asyncHandler(async (req, res) => {
         message: 'OTP verified successfully',
     });
 
+})
+
+export const logoutUser = asyncHandler(async (req, res) => {
+    // Clear the token cookie
+    res.clearCookie('token', {
+        httpOnly: true,
+        sameSite: 'lax',
+        secure: false, // true in production with HTTPS
+    });
+
+    res.status(200).json({
+        success: true,
+        message: 'Logged out successfully'
+    });
 })

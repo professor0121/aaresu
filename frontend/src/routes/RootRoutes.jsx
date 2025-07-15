@@ -4,6 +4,7 @@ import Login from '../pages/LoginPage'
 import Register from '../pages/RegisterPage'
 import Home from '../pages/HomePage'
 import ForgetPassword from '../pages/ForgetPassword'
+import ProtectedRoute from '@/components/ProtectedRoute'
 
 const RootRoutes = () => {
   return (
@@ -16,7 +17,7 @@ const RootRoutes = () => {
     }}
     >
     <Routes >
-      <Route path='/' element={<Home/>}/>
+      <Route path='/' element={<ProtectedRoute><Home/></ProtectedRoute>}/>
       <Route path='/login' element={<Login/>}/>
       <Route path='/register' element={<Register/>}/>
       <Route path='/forget-password' element={<ForgetPassword/>}/>
