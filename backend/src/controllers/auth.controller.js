@@ -24,11 +24,13 @@ export const registerUser = asyncHandler(async (req, res) => {
 export const loginUser = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
     const user = await loginUserService(email, password);
-    res.cookie('token', user.token, { httpOnly: true });
-    res.status(200).json({
-        message: 'User logged in successfully',
-        user,
-    })
+    res.cookie('token', user.token, {
+        httpOnly: true,
+        sameSite: 'lax',
+        secure: false, // true in production with HTTPS
+    });
+    res.status(200).json({ message: 'Logged in', user });
+
 })
 
 export const updateUser = asyncHandler(async (req, res) => {

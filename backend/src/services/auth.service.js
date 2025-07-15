@@ -22,9 +22,7 @@ export const loginUserService = async (email, password) => {
   }
   const token = await generateToken(email);
   const otp=generateOTP();
-  console.log( "the otp is" ,otp)
   await storeOTP(email,otp);
-  console.log("the otp is stored in redis");
   await sendVerificationOtp(email,otp);
   return { user, token };
 };
