@@ -1,6 +1,6 @@
 import asyncHandler from '../utils/asyncHandler.js';
 import { registerUserService, loginUserService } from '../services/auth.service.js';
-import { findUserByEmail, updateVerified } from '../dao/user.dao.js';
+import { findUserByEmail, updateVerified} from '../dao/user.dao.js';
 import { compareOTP } from '../utils/otp.js';
 import { generateToken } from '../utils/jwtToken.js';
 
@@ -109,4 +109,11 @@ export const logoutUser = asyncHandler(async (req, res) => {
         success: true,
         message: 'Logged out successfully'
     });
+})
+
+
+export const forgetUserPassword=asyncHandler(async(req,res)=>{
+    //logic for forgetting password
+    console.log("helo users",req.user);
+    return req.user
 })
