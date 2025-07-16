@@ -1,6 +1,6 @@
 import express from 'express';
 const router=express.Router();
-import { registerUser, loginUser, updateUser, getUser, sendOtp, verifyOtp, logoutUser } from '../controllers/auth.controller.js';
+import { registerUser, loginUser, updateUser, getUser, sendOtp, verifyOtp, logoutUser,forgetUserPassword } from '../controllers/auth.controller.js';
 import { authenticateToken, requireVerified, optionalAuth } from '../middlewares/auth.middleware.js';
 
 // Public routes (no authentication required)
@@ -17,5 +17,7 @@ router.get('/profile', authenticateToken, requireVerified, getUser);
 
 // Logout route (optional auth - works with or without token)
 router.post('/logout', optionalAuth, logoutUser);
+
+router.post('/forget-password',authenticateToken,forgetUserPassword)
 
 export default router;

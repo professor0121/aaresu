@@ -54,3 +54,31 @@ export const loadUser = createAsyncThunk(
     }
   }
 );
+
+// export const forgetPassword = createAsyncThunk(
+//   'auth/forgetPassword',
+//   async (formData, { rejectWithValue }) => {
+//     try {
+//       const response = await axiosInstance.post('/auth/forget-password', formData);
+//       console.log("response data", response.data)
+//       return response.data;
+//     } catch (err) {
+//       return rejectWithValue(err.response?.data?.message || 'Password reset failed');
+//     }
+//   }
+// );
+
+
+// Step 1: Send OTP to email
+export const forgetPassword = createAsyncThunk('auth/forgetPassword', async ({ email }) => {
+  const res = await axios.post('/api/auth/forgot-password', { email });
+  console.log("response data from froget pass",res.data)
+  return res.data;
+});
+
+
+// Step 3: Reset password
+export const resetPassword = createAsyncThunk('auth/resetPassword', async ({ email, newPassword }) => {
+  const res = await axios.post('/api/auth/reset-password', { email, newPassword });
+  return res.data;
+});

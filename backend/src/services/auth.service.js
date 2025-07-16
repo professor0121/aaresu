@@ -26,3 +26,4 @@ export const loginUserService = async (email, password) => {
   await sendVerificationOtp(email,otp);
   return { user, token };
 };
+

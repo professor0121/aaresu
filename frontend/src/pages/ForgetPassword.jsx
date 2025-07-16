@@ -4,10 +4,14 @@ import { useState } from 'react';
 import { Form, FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { useDispatch, useSelector } from 'react-redux';
+import { forgetPassword } from '../redux/auth/authThunks';
 
 const ForgetPassword = () => {
   const [isOtp, setIsOtp] = useState(true);
   const [isVerified, setIsVerified] = useState(false);
+  const [isPasswordReset, setIsPasswordReset] = useState(false);
+  const dispatch = useDispatch();
 
   const form = useForm({
     defaultValues: {
@@ -20,7 +24,7 @@ const ForgetPassword = () => {
 
   const onSubmit = (data) => {
     if (isOtp) {
-      console.log('Email submitted:', data.email);
+      dispatch(forgetPassword({email:data.email}));
       setIsOtp(false); // Show OTP field
     } else if (!isVerified) {
       console.log('OTP submitted:', data.otp);
