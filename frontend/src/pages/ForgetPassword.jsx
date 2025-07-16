@@ -1,111 +1,145 @@
 import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { Form, FormField, FormItem, FormLabel, FormControl, FormDescription, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 
 const ForgetPassword = () => {
-    const [isOtp, setIsOtp] = useState(true)
+  const [isOtp, setIsOtp] = useState(true);
+  const [isVerified, setIsVerified] = useState(false);
+
   const form = useForm({
     defaultValues: {
       email: '',
+      otp: '',
+      newPassword: '',
+      confirmPassword: '',
     },
   });
 
   const onSubmit = (data) => {
-    console.log('Submitted:', data);
-    setIsOtp(!isOtp)
+    if (isOtp) {
+      console.log('Email submitted:', data.email);
+      setIsOtp(false); // Show OTP field
+    } else if (!isVerified) {
+      console.log('OTP submitted:', data.otp);
+      // Simulate OTP verification
+      if (data.otp === '123456') {
+        setIsVerified(true); // Show password fields
+      } else {
+        alert('Invalid OTP');
+      }
+    } else {
+      if (data.newPassword !== data.confirmPassword) {
+        alert("Passwords don't match");
+        return;
+      }
+      console.log('Password reset:', data.newPassword);
+      // Call password reset API here
+      alert('Password successfully reset!');
+    }
   };
 
   return (
     <div className="flex justify-center items-center h-screen px-4">
-      {isOtp && <Form {...form}>
+      <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="w-full max-w-[480px] p-8 rounded-2xl shadow space-y-6 border"
         >
           <div className="text-center space-y-1">
-            <h1 className="text-2xl font-semibold tracking-tight text-foreground">Forget Password</h1>
+            <h1 className="text-2xl font-semibold tracking-tight text-white text-foreground">
+              {isOtp ? 'Forget Password' : isVerified ? 'Reset Password' : 'OTP Verification'}
+            </h1>
             <p className="text-sm text-muted-foreground">
-              Enter your email to reset your password
+              {isOtp
+                ? 'Enter your email to reset your password'
+                : isVerified
+                ? 'Enter your new password'
+                : 'Enter the OTP sent to your email'}
             </p>
           </div>
 
-          <FormField
-            name="email"
-            control={form.control}
-            rules={{
-              required: "Email is required",
-              pattern: {
-                value: /^\S+@\S+$/i,
-                message: "Enter a valid email address",
-              },
-            }}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input
-                    type="email"
-                    placeholder="you@example.com"
-                    className="w-full"
-                    {...field}
-                  />
-                </FormControl>
-                <FormDescription>We'll send an OTP to your email.</FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          {isOtp && (
+            <FormField
+              name="email"
+              control={form.control}
+              rules={{
+                required: 'Email is required',
+                pattern: {
+                  value: /^\S+@\S+$/i,
+                  message: 'Enter a valid email address',
+                },
+              }}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-white">Email</FormLabel>
+                  <FormControl>
+                    <Input type="email" placeholder="you@example.com" {...field} />
+                  </FormControl>
+                  <FormDescription>We'll send an OTP to your email.</FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
+
+          {!isOtp && !isVerified && (
+            <FormField
+              name="otp"
+              control={form.control}
+              rules={{ required: 'OTP is required' }}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-white">OTP</FormLabel>
+                  <FormControl>
+                    <Input type="text" placeholder="Enter OTP" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
+
+          {isVerified && (
+            <>
+              <FormField
+                name="newPassword"
+                control={form.control}
+                rules={{ required: 'New password is required' }}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-white">New Password</FormLabel>
+                    <FormControl>
+                      <Input type="password" placeholder="New password" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                name="confirmPassword"
+                control={form.control}
+                rules={{ required: 'Confirm your password' }}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-white">Confirm Password</FormLabel>
+                    <FormControl>
+                      <Input type="password" placeholder="Confirm password" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </>
+          )}
 
           <Button type="submit" className="w-full">
-            Send OTP
+            {isOtp ? 'Send OTP' : isVerified ? 'Reset Password' : 'Verify OTP'}
           </Button>
         </form>
-      </Form>}
-      {!isOtp && <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="w-full max-w-[480px] p-8 rounded-2xl shadow space-y-6 border"
-        >
-          <div className="text-center space-y-1">
-            <h1 className="text-2xl font-semibold tracking-tight text-white text-foreground">OTP Verification</h1>
-            <p className="text-sm text-muted-foreground">
-              Enter the OTP sent to your email
-            </p>
-          </div>
-
-          <FormField
-          className={"text-white"}
-            name="otp"
-            control={form.control}
-            rules={{ required: "OTP is required" }}
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>OTP</FormLabel>
-                <FormControl>
-                  <Input
-                    type="text"
-                    placeholder="Enter OTP"
-                    className="w-full"
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormDescription>
-            <p oncllick={() => setIsOtp(!isOtp)}>Resend OTP</p>
-          </FormDescription>
-
-          <Button type="submit" className="w-full">
-            Verify
-          </Button>
-        </form>
-      </Form>}
+      </Form>
     </div>
   );
 };
