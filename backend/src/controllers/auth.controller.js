@@ -1,8 +1,9 @@
 import asyncHandler from '../utils/asyncHandler.js';
 import { registerUserService, loginUserService } from '../services/auth.service.js';
-import { findUserByEmail, updateVerified} from '../dao/user.dao.js';
-import { compareOTP } from '../utils/otp.js';
-import { generateToken } from '../utils/jwtToken.js';
+import { findUserByEmail, updateVerified, updateUserById } from '../dao/user.dao.js';
+import { compareOTP, generateOTP, storeOTP } from '../utils/otp.js';
+import { sendVerificationOtp, sendPasswordResetOtp } from '../utils/sendEmail.js';
+import { hashPassword } from '../utils/hashPassword.js';
 
 export const registerUser = asyncHandler(async (req, res) => {
     const { username, email, password } = req.body;
@@ -25,6 +26,11 @@ export const registerUser = asyncHandler(async (req, res) => {
 export const loginUser = asyncHandler(async (req, res) => {
     const { email, password } = req.body;
     const user = await loginUserService(email, password);
+    res.cookie('token', user.token, {
+        httpOnly: true,
+        sameSite: 'lax',
+        secure: false, // true in production with HTTPS
+    });
     res.status(200).json({ message: 'Logged in', user });
 
 })
@@ -71,7 +77,6 @@ export const sendOtp = asyncHandler(async (req, res) => {
 export const verifyOtp = asyncHandler(async (req, res) => {
 
     const { email, otp } = req.body;
-
     const user = await findUserByEmail(email);
     if (!user) {
         return res.status(400).json({
@@ -85,12 +90,6 @@ export const verifyOtp = asyncHandler(async (req, res) => {
         });
     }
     await updateVerified(email);
-    const token = await generateToken(email);
-      res.cookie('token',token, {
-        httpOnly: true,
-        sameSite: 'lax',
-        secure: false, // true in production with HTTPS
-    });
     res.status(200).json({
         message: 'OTP verified successfully',
     });
@@ -111,9 +110,53 @@ export const logoutUser = asyncHandler(async (req, res) => {
     });
 })
 
+// Forgot Password - Step 1: Send OTP to email for password reset
+export const forgotPassword = asyncHandler(async (req, res) => {
+    const { email } = req.body;
 
-export const forgetUserPassword=asyncHandler(async(req,res)=>{
-    //logic for forgetting password
-    console.log("helo users",req.user);
-    return req.user
-})
+    // Check if user exists
+    const user = await findUserByEmail(email);
+    if (!user) {
+        return res.status(404).json({
+            success: false,
+            message: 'User not found with this email address'
+        });
+    }
+
+    // Generate and store OTP
+    const otp = generateOTP();
+    await storeOTP(email, otp, 600); // 10 minutes expiry for password reset
+
+    // Send OTP via email
+    await sendPasswordResetOtp(email, otp);
+
+    res.status(200).json({
+        success: true,
+        message: 'Password reset OTP sent to your email'
+    });
+});
+
+// Reset Password - Step 3: Update password after OTP verification
+export const resetPassword = asyncHandler(async (req, res) => {
+    const { email, newPassword } = req.body;
+
+    // Check if user exists
+    const user = await findUserByEmail(email);
+    if (!user) {
+        return res.status(404).json({
+            success: false,
+            message: 'User not found with this email address'
+        });
+    }
+
+    // Hash the new password
+    const hashedPassword = await hashPassword(newPassword);
+
+    // Update user's password
+    await updateUserById(user._id, { password: hashedPassword });
+
+    res.status(200).json({
+        success: true,
+        message: 'Password reset successfully'
+    });
+});

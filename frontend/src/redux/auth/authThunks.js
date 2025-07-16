@@ -70,15 +70,30 @@ export const loadUser = createAsyncThunk(
 
 
 // Step 1: Send OTP to email
-export const forgetPassword = createAsyncThunk('auth/forgetPassword', async ({ email }) => {
-  const res = await axios.post('/api/auth/forgot-password', { email });
-  console.log("response data from froget pass",res.data)
-  return res.data;
-});
+// Forget Password - Step 1: Send OTP
+export const forgetPassword = createAsyncThunk(
+  'auth/forgetPassword',
+  async (formData, { rejectWithValue }) => {
+    try {
+      console.log("inititititititititititititi")
+      const res = await axiosInstance.post('/auth/forgot-password', formData);
+      console.log("response data from froget pass",res.data);
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message || 'Failed to send OTP');
+    }
+  }
+);
 
-
-// Step 3: Reset password
-export const resetPassword = createAsyncThunk('auth/resetPassword', async ({ email, newPassword }) => {
-  const res = await axios.post('/api/auth/reset-password', { email, newPassword });
-  return res.data;
-});
+// Reset Password - Step 3: Set New Password
+export const resetPassword = createAsyncThunk(
+  'auth/resetPassword',
+  async ({ email, newPassword }, { rejectWithValue }) => {
+    try {
+      const res = await axiosInstance.post('/auth/reset-password', { email, newPassword });
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(err.response?.data?.message || 'Failed to reset password');
+    }
+  }
+);

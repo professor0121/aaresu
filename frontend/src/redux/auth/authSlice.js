@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { loginUser, registerUser, verifyOtp, loadUser } from './authThunks';
+import { loginUser, registerUser, verifyOtp, loadUser, forgetPassword, resetPassword } from './authThunks';
 
 const initialState = {
   user: null,
@@ -84,7 +84,33 @@ const authSlice = createSlice({
       state.user = null;
       state.isAuthenticated = false;
       state.loading = false;
+    })
+    // FORGET PASSWORD
+    builder.addCase(forgetPassword.pending, (state) => {
+      state.loading = true;
+      state.error = null;
     });
+    builder.addCase(forgetPassword.fulfilled, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(forgetPassword.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload || action.error.message;
+    });
+
+    // RESET PASSWORD
+    builder.addCase(resetPassword.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    });
+    builder.addCase(resetPassword.fulfilled, (state) => {
+      state.loading = false;
+    });
+    builder.addCase(resetPassword.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload || action.error.message;
+    });
+
   },
 });
 
