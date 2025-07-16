@@ -151,7 +151,7 @@ function AuthSection({ isMobile = false }) {
                         className={`${isMobile ? 'w-full' : ''} px-3 py-1 text-xs`}
                     >
                         <LogOut size={14} className="mr-1" />
-                        Logout
+                    
                     </LogoutButton>
                 </div>
             )}

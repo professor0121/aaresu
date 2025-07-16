@@ -17,6 +17,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { loginUser, verifyOtp } from '../redux/auth/authThunks';
+import ForgetPassword from './ForgetPassword';
 
 export default function LoginForm() {
   const dispatch = useDispatch();
@@ -117,6 +118,13 @@ export default function LoginForm() {
               )}
             />
           )}
+          {
+            isOtp&&(
+              <button>
+                <Link to="/forget-password">Forget Password</Link>
+              </button>
+            )
+          }
 
           {/* OTP (only in OTP phase) */}
           {!isOtp && (
