@@ -24,6 +24,7 @@ export default function LoginForm() {
         defaultValues: {
             email: "",
             password: "",
+            role: ""
         },
     });
 
@@ -108,6 +109,25 @@ export default function LoginForm() {
                                     <Input
                                         type="password"
                                         placeholder="********"
+                                        className="w-full"
+                                        {...field}
+                                    />
+                                </FormControl>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
+                    <FormField
+                        name='role'
+                        control={form.control}
+                        rules={{ required: "Role is required" }}
+                        render={({ field }) => (
+                            <FormItem>
+                                <FormLabel>Role</FormLabel>
+                                <FormControl>
+                                    <Input
+                                        type="text"
+                                        placeholder="Enter your role"
                                         className="w-full"
                                         {...field}
                                     />
