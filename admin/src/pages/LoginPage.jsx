@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import {
   Form,
@@ -16,7 +16,7 @@ import {
 
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { loginUser, verifyOtp } from '../redux/auth/authThunks';
+import { loginAdmin, verifyOtp } from '../redux/auth/authThunks';
 
 export default function LoginForm() {
   const dispatch = useDispatch();
@@ -33,9 +33,9 @@ export default function LoginForm() {
 
   // 🚀 Submit Login Handler
   const handleLogin = async (data) => {
-    const resultAction = await dispatch(loginUser(data));
+    const resultAction = await dispatch(loginAdmin(data));
 
-    if (loginUser.fulfilled.match(resultAction)) {
+    if (loginAdmin.fulfilled.match(resultAction)) {
       // Show OTP form
       setIsOtp(false);
     } else {

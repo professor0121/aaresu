@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
-import { loadUser } from '../redux/auth/authThunks';
+import { loadAdmin } from '../redux/auth/authThunks';
 import { logout } from '../redux/auth/authSlice';
 
 /**
@@ -17,7 +17,7 @@ export const useAuth = () => {
     const initAuth = async () => {
       if (!isInitialized && !isAuthenticated && !user) {
         try {
-          await dispatch(loadUser()).unwrap();
+          await dispatch(loadAdmin()).unwrap();
         } catch (error) {
           console.log('No valid session found');
         }
@@ -31,7 +31,7 @@ export const useAuth = () => {
   // Check if user has valid token
   const checkAuth = async () => {
     try {
-      await dispatch(loadUser()).unwrap();
+      await dispatch(loadAdmin()).unwrap();
       return true;
     } catch (error) {
       return false;
@@ -39,22 +39,22 @@ export const useAuth = () => {
   };
 
   // Logout user
-  const logoutUser = () => {
+  const logoutAdmin = () => {
     dispatch(logout());
   };
 
   // Check if user is verified
-  const isVerified = user?.verified || false;
+  const isVerified = admin?.verified || false;
 
   return {
-    user,
+    admin,
     isAuthenticated,
     isVerified,
     loading,
     error,
     isInitialized,
     checkAuth,
-    logoutUser
+    logoutAdmin
   };
 };
 
