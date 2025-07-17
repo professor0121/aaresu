@@ -1,6 +1,7 @@
 import asyncHandler from '../utils/asyncHandler.js';
-import { registerUserService, loginUserService } from '../services/auth.service.js';
+import { registerUserService, loginUserService,createAdminService,loginAdminService } from '../services/auth.service.js';
 import { findUserByEmail, updateVerified, updateUserById } from '../dao/user.dao.js';
+import { findAdminByEmail } from '../dao/admin.dao.js';
 import { compareOTP, generateOTP, storeOTP } from '../utils/otp.js';
 import { sendVerificationOtp, sendPasswordResetOtp } from '../utils/sendEmail.js';
 import { hashPassword } from '../utils/hashPassword.js';
@@ -67,11 +68,6 @@ export const getUser = asyncHandler(async (req, res) => {
         message: 'User retrieved successfully',
         user
     });
-})
-
-export const sendOtp = asyncHandler(async (req, res) => {
-    //logic of sending otp
-    return req.body;
 })
 
 export const verifyOtp = asyncHandler(async (req, res) => {
@@ -160,3 +156,52 @@ export const resetPassword = asyncHandler(async (req, res) => {
         message: 'Password reset successfully'
     });
 });
+
+export const registerAdmin=asyncHandler(async(req,res)=>{
+    console.log("registerAdmin");
+    const { username, email, password } = req.body;
+    console.log(req.body)
+    console.log(username,email,password);
+    const admin = await findAdminByEmail(email);
+    if (admin) {
+        return res.status(400).json({
+            message: 'Admin already exists',
+        });
+    }
+    const newAdmin = await createAdminService( username, email, password );
+    res.status(200).json( {
+        message:"Admin created successfully",
+        newAdmin
+    })
+})
+
+export const loginAdmin=asyncHandler(async(req,res)=>{
+    const { email, password } = req.body;
+    const admin = await findAdminByEmail(email);
+    if (!admin) {
+        return res.status(400).json({
+            message: 'Admin not found',
+        });
+    }
+    const adminService=await loginAdminService(email, password);
+    res.cookie('token', adminService.token, {
+        httpOnly: true,
+        sameSite: 'lax',
+        secure: false, // true in production with HTTPS
+    });
+    res.status(200).json({
+        message: 'Logged in',
+        admin:adminService.admin,
+        token:adminService.token
+    });
+})
+
+export const getAdmin=asyncHandler(async(req,res)=>{
+    const {email}=req.user;
+    const admin = await findAdminByEmail(email);
+    res.status(200).json({
+        success: true,
+        message: 'Admin retrieved successfully',
+        admin
+    });
+})

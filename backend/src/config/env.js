@@ -12,4 +12,8 @@ export const ENV={
     REDIS_PASSWORD:process.env.REDIS_PASSWORD,
     REDIS_PORT:process.env.REDIS_PORT,
     REDIS_USERNAME:process.env.REDIS_USERNAME,
+
+    ADMIN_EMAIL:process.env.ADMIN_EMAIL,
+    ADMIN_EMAIL_PASS:process.env.ADMIN_EMAIL_PASS,
+    ADMIN_USERNAME:process.env.ADMIN_USERNAME,
 }
