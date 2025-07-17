@@ -1,15 +1,15 @@
-// src/layout/MainLayout.jsx
 import React from 'react';
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import { AppSidebar } from '@/components/AppSidebar';
 
-const MainLayout = ({ children }) => {
+export default function Layout({ children }) {
   return (
-    <div style={{ display: 'flex' }}>
-      {/* <Sidebar /> */}
-      <div style={{ flexGrow: 1 }}>
+    <SidebarProvider>
+      <AppSidebar />
+      <main>
+        <SidebarTrigger />
         {children}
-      </div>
-    </div>
+      </main>
+    </SidebarProvider>
   );
-};
-
-export default MainLayout;
+}
