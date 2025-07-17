@@ -5,6 +5,7 @@ const app=express();
 import authRoutes from './routes/authRoutes.js';
 import protectedRoutes from './routes/protectedRoutes.js';
 import { connectRedis } from './config/redisClient.js';
+import requestLogger from './middlewares/requestLogger.js';
 
 connectRedis();
 app.use(cors(
@@ -16,6 +17,7 @@ app.use(cors(
 app.use(express.json());
 app.use(cookieParser());
 
+app.use(requestLogger); // apply middleware globally
 // Routes
 app.use('/api/auth',authRoutes);
 app.use('/api/protected',protectedRoutes);
