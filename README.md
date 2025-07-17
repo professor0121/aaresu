@@ -111,10 +111,21 @@ npm run dev
 - **[🎨 System Diagrams](SYSTEM_DIAGRAMS.md)** - Mermaid architecture diagrams
 - **[🎯 UML Diagrams](UML_DIAGRAMS.md)** - Technical UML diagrams
 - **[🌐 API Documentation](API_DOCUMENTATION.md)** - Complete API reference
+- **[👨‍💻 Developer Onboarding Guide](DEVELOPER_ONBOARDING.md)** - Complete setup and development guide
 
-### 🔐 **Authentication Guides**
+### 🔐 **Authentication & Security**
 - **[🔒 Authentication Flow](AUTHENTICATION_FLOW.md)** - Complete auth implementation
 - **[🛡️ Protected Routes Guide](backend/PROTECTED_ROUTES_GUIDE.md)** - Route protection details
+- **[🔐 Security Guide](SECURITY_GUIDE.md)** - Security best practices and threat modeling
+
+### 📧 **Communication & Notifications**
+- **[📧 Notification System](NOTIFICATION_SYSTEM.md)** - Email, SMS, push notifications, and in-app messaging
+
+### 🚀 **Deployment & Operations**
+- **[🚀 Deployment Guide](DEPLOYMENT_GUIDE.md)** - Production deployment instructions
+- **[📊 Monitoring Guide](MONITORING_GUIDE.md)** - Performance monitoring and metrics
+- **[🧪 Testing Guide](TESTING_GUIDE.md)** - Testing strategies and implementation
+- **[🔧 Troubleshooting Guide](TROUBLESHOOTING_GUIDE.md)** - Common issues and solutions
 
 ## 🛠️ Technology Stack
 
