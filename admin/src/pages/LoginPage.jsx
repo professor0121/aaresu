@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import {
   Form,
@@ -16,7 +16,8 @@ import {
 
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { loginAdmin, verifyOtp } from '../redux/auth/authThunks';
+import { loginUser, verifyOtp } from '../redux/auth/authThunks';
+import ForgetPassword from './ForgetPassword';
 
 export default function LoginForm() {
   const dispatch = useDispatch();
@@ -33,9 +34,9 @@ export default function LoginForm() {
 
   // 🚀 Submit Login Handler
   const handleLogin = async (data) => {
-    const resultAction = await dispatch(loginAdmin(data));
+    const resultAction = await dispatch(loginUser(data));
 
-    if (loginAdmin.fulfilled.match(resultAction)) {
+    if (loginUser.fulfilled.match(resultAction)) {
       // Show OTP form
       setIsOtp(false);
     } else {
@@ -117,6 +118,13 @@ export default function LoginForm() {
               )}
             />
           )}
+          {
+            isOtp&&(
+              <button>
+                <Link to="/forget-password">Forget Password</Link>
+              </button>
+            )
+          }
 
           {/* OTP (only in OTP phase) */}
           {!isOtp && (
