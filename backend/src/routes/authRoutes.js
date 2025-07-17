@@ -9,9 +9,6 @@ import {
     logoutUser,
     forgotPassword,
     resetPassword,
-    registerAdmin,
-    getAdmin,
-    loginAdmin
 } from '../controllers/auth.controller.js';
 import {
     authenticateToken,
@@ -37,11 +34,6 @@ router.get('/profile', authenticateToken, requireVerified, getUser);
 router.post('/logout', optionalAuth, logoutUser);
 
 
-//Admin auth routes for validations...
 
-router.post('/admin/register', registerAdmin);
-router.post('/admin/login', loginAdmin);
-router.post('/admin/verifyOtp', verifyOtp);
-router.get('/admin/me', authenticateToken, getAdmin);
 
 export default router;
