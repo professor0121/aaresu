@@ -16,4 +16,6 @@ export const ENV={
     ADMIN_EMAIL:process.env.ADMIN_EMAIL,
     ADMIN_EMAIL_PASS:process.env.ADMIN_EMAIL_PASS,
     ADMIN_USERNAME:process.env.ADMIN_USERNAME,
+
+    ARCJET_KEY:process.env.ARCJET_KEY,
 }
